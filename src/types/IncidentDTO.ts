@@ -9,13 +9,13 @@ export interface IncidentAssigneeDTO {
 }
 
 export interface IncidentDTO {
-  id: string
+  readonly id: string
   title: string
   description: string
   severity: 'Critical' | 'High' | 'Medium' | 'Low'
   status: 'Open' | 'InProgress' | 'Acknowledged' | 'Resolved'
-  service: IncidentServiceDTO
-  createdAt: string
-  updatedAt: string
+  readonly service: IncidentServiceDTO
+  readonly createdAt: string
+  readonly updatedAt: string
   assignee: IncidentAssigneeDTO | null
 }

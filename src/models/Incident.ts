@@ -13,15 +13,15 @@ export enum IncidentStatus {
 }
 
 export interface Incident {
-  id: string
+  readonly id: string
   title: string
   description: string
   severity: IncidentSeverity
   status: IncidentStatus
-  serviceId: string
-  serviceName: string
-  createdAt: Date
-  updatedAt: Date
+  readonly serviceId: string
+  readonly serviceName: string
+  readonly createdAt: Date
+  readonly updatedAt: Date
   assigneeId: string | null
   assigneeName: string | null
 }
