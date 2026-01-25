@@ -48,10 +48,6 @@ export function mapPartialToIncidentDTO(updates: Partial<Incident>): Partial<Inc
   if (updates.severity !== undefined) dtoUpdates.severity = updates.severity
   if (updates.status !== undefined) dtoUpdates.status = updates.status
 
-  if (updates.serviceId && updates.serviceName) {
-    dtoUpdates.service = { id: updates.serviceId, name: updates.serviceName }
-  }
-
   if (updates.assigneeId !== undefined || updates.assigneeName !== undefined) {
     if (updates.assigneeId === null) {
       dtoUpdates.assignee = null
