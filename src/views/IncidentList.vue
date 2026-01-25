@@ -11,6 +11,16 @@ const search = ref('')
 const statusFilter = ref<IncidentStatus | null>(null)
 const severityFilter = ref<IncidentSeverity | null>(null)
 
+const activeFilters = computed(
+  () => !!search.value || !!statusFilter.value || !!severityFilter.value,
+)
+
+const clearFilters = () => {
+  search.value = ''
+  statusFilter.value = null
+  severityFilter.value = null
+}
+
 const tableHeaders = [
   { title: 'Severity', key: 'severity' },
   { title: 'ID', key: 'id' },
@@ -111,6 +121,20 @@ const getStatusColor = (status: IncidentStatus) => {
           density="comfortable"
           variant="outlined"
         ></v-select>
+      </v-col>
+    </v-row>
+
+    <v-row v-if="activeFilters" class="mb-2">
+      <v-col>
+        <v-btn
+          color="secondary"
+          variant="text"
+          prepend-icon="mdi-filter-off"
+          @click="clearFilters"
+          size="small"
+        >
+          Clear Filters
+        </v-btn>
       </v-col>
     </v-row>
 
