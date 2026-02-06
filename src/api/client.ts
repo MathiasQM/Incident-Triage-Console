@@ -9,4 +9,20 @@ const apiClient = axios.create({
   },
 })
 
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const config = error.config
+    config._retryCount = config._retryCount || 0
+
+    if (config._retryCount < 3 && (!error.response || error.response.status >= 500)) {
+      config._retryCount += 1
+      const backoff = Math.pow(2, config._retryCount) * 1000
+      await new Promise((resolve) => setTimeout(resolve, backoff))
+      return apiClient(config)
+    }
+    return Promise.reject(error)
+  },
+)
+
 export default apiClient

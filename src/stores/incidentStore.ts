@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { incidentApi } from '@/api/incidentApi'
+import { incidentService } from '@/api/incidentService'
 import { mapToIncident, mapPartialToIncidentDTO } from '@/mappers/IncidentMapper'
 import type { Incident } from '@/models/Incident'
 import { IncidentSeverity } from '@/models/Incident'
@@ -27,7 +27,7 @@ export const useIncidentStore = defineStore('incident', () => {
     loading.value = true
     error.value = null
     try {
-      const dtos = await incidentApi.getAllIncidents()
+      const dtos = await incidentService.getAllIncidents()
       incidents.value = dtos.map(mapToIncident)
     } catch (err: unknown) {
       console.error('Failed to fetch incidents:', err)
@@ -42,7 +42,7 @@ export const useIncidentStore = defineStore('incident', () => {
     loading.value = true
     try {
       const dtoUpdates = mapPartialToIncidentDTO(updates)
-      await incidentApi.updateIncident(id, dtoUpdates)
+      await incidentService.updateIncident(id, dtoUpdates)
 
       const index = incidents.value.findIndex((i) => i.id === id)
       if (index !== -1) {

@@ -1,29 +1,38 @@
 # Incident Triage Console
 
-This template should help get you started developing with Vue 3 in Vite.
+A modern frontend application for managing and triaging system incidents, built with **Vue 3**, **TypeScript**, and **Vuetify**.
 
-## Recommended IDE Setup
+## 🏗 MACH Architecture & Design Philosophy
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+This project is architected to align with **MACH** (Microservices, API-First, Cloud-Native, Headless) principles, demonstrating how a frontend codebase can be structured for enterprise scale.
 
-## Recommended Browser Setup
+### 🧩 Microservices Ready
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+The frontend treats the backend as a set of distinct, domain-specific services rather than a monolithic API.
 
-## Type Support for `.vue` Imports in TS
+- **Service Layer**: The `src/services` and `src/api` directories are structured to interact with independent services (e.g., `incidentService`, `contentService`).
+- **Decoupling**: The Store layer (`incidentStore.ts`) uses these services to fetch data, keeping the UI completely decoupled from the data source implementation.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### ☁️ Cloud-Native & API-First
 
-## Customize configuration
+- **Resiliency**: The API client (`client.ts`) implements **automated retries with exponential backoff** for network errors and 5xx responses. This ensures robustness in distributed, cloud environments where transient failures are common.
+- **Strict Typing**: All API interactions benefit from strict TypeScript DTO patterns and Mapper functions (`IncidentMapper.ts`), ensuring a clean contract between frontend and backend.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 🗣️ Headless Content (Simulation)
 
-## Project Setup
+- **Content as a Service**: The application simulates a Headless CMS integration via `ContentStore` (`contentStore.ts`).
+- **Dynamic Content**: UI strings and labels are fetched dynamically (e.g., via `getContent(...)`) rather than being hardcoded. This paves the way for easy integration with platforms like Contentful or Sanity, and simplifies localization.
+
+## ⚠️ Demo Limitations
+
+### Server-Side Pagination
+
+**Note**: This project is a **demo** implementation. As such, it currently **simulates** data fetching but does **not** implement server-side pagination.
+
+- The `fetchAll` method retrieves all mock incidents at once.
+- In a real production environment (`Enterprise Ready`), this would be replaced with a paginated endpoint (e.g., `GET /incidents?page=1&limit=50`) to handle large datasets efficiently.
+
+## 🛠 Project Setup
 
 ```sh
 npm install
@@ -41,13 +50,13 @@ npm run dev
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### Run Unit Tests with Vitest
 
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### Lint with ESLint
 
 ```sh
 npm run lint

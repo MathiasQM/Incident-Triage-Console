@@ -2,10 +2,12 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useIncidentStore } from '@/stores/incidentStore'
-import { IncidentSeverity, IncidentStatus } from '@/models/Incident'
+import { useContentStore } from '@/stores/contentStore'
+import { IncidentSeverity, IncidentStatus, type Incident } from '@/models/Incident'
 
 const router = useRouter()
 const store = useIncidentStore()
+const contentStore = useContentStore()
 
 const search = ref('')
 const statusFilter = ref<IncidentStatus | null>(null)
@@ -33,6 +35,7 @@ const tableHeaders = [
 
 onMounted(() => {
   store.fetchIncidents()
+  contentStore.fetchContent()
 })
 
 const filteredIncidents = computed(() => {
@@ -46,8 +49,8 @@ const filteredIncidents = computed(() => {
   return items
 })
 
-const handleRowClick = (item: any, row: any) => {
-  router.push(`/incidents/${row.item.id}`)
+const handleRowClick = (_: Event, { item }: { item: Incident }) => {
+  router.push(`/incidents/${item.id}`)
 }
 
 const getSeverityColor = (severity: IncidentSeverity) => {
@@ -83,9 +86,28 @@ const getStatusColor = (status: IncidentStatus) => {
 
 <template>
   <v-container>
+    <v-alert
+      v-if="contentStore.content['global.maintenance_banner']"
+      type="warning"
+      variant="tonal"
+      class="mb-4"
+    >
+      {{ contentStore.getContent('global.maintenance_banner', 'Maintenance Warning') }}
+    </v-alert>
+
     <v-row class="mb-4" align="center">
       <v-col>
-        <h1 class="text-h4 font-weight-bold text-primaryBlue">Incident inbox</h1>
+        <h1 class="text-h4 font-weight-bold text-primaryBlue">
+          {{ contentStore.getContent('incident_list.header', 'Incident inbox') }}
+        </h1>
+        <p class="text-subtitle-1 text-medium-emphasis mt-1">
+          {{
+            contentStore.getContent(
+              'incident_list.welcome_message',
+              'Manage your incidents effectively.',
+            )
+          }}
+        </p>
       </v-col>
     </v-row>
 
@@ -147,7 +169,7 @@ const getStatusColor = (status: IncidentStatus) => {
         hover
         @click:row="handleRowClick"
       >
-        <template #item.severity="{ item }">
+        <template v-slot:item.severity="{ item }">
           <v-chip
             :color="getSeverityColor(item.severity)"
             size="small"
@@ -158,7 +180,7 @@ const getStatusColor = (status: IncidentStatus) => {
           </v-chip>
         </template>
 
-        <template #item.status="{ item }">
+        <template v-slot:item.status="{ item }">
           <v-chip
             :color="getStatusColor(item.status)"
             size="small"
@@ -169,11 +191,11 @@ const getStatusColor = (status: IncidentStatus) => {
           </v-chip>
         </template>
 
-        <template #item.createdAt="{ item }">
+        <template v-slot:item.createdAt="{ item }">
           {{ item.createdAt.toLocaleString() }}
         </template>
 
-        <template #item.assigneeName="{ item }">
+        <template v-slot:item.assigneeName="{ item }">
           <span v-if="item.assigneeName" class="d-flex align-center">
             <v-avatar size="24" color="primary-fade" class="mr-2 text-primary">
               <span class="text-caption">{{ item.assigneeName.charAt(0) }}</span>
