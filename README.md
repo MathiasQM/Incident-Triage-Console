@@ -2,28 +2,28 @@
 
 A modern frontend application for managing and triaging system incidents, built with **Vue 3**, **TypeScript**, and **Vuetify**.
 
-## 🏗 MACH Architecture & Design Philosophy
+## MACH Architecture & Design Philosophy
 
 This project is architected to align with **MACH** (Microservices, API-First, Cloud-Native, Headless) principles, demonstrating how a frontend codebase can be structured for enterprise scale.
 
-### 🧩 Microservices Ready
+### Microservices Ready
 
 The frontend treats the backend as a set of distinct, domain-specific services rather than a monolithic API.
 
 - **Service Layer**: The `src/services` and `src/api` directories are structured to interact with independent services (e.g., `incidentService`, `contentService`).
 - **Decoupling**: The Store layer (`incidentStore.ts`) uses these services to fetch data, keeping the UI completely decoupled from the data source implementation.
 
-### ☁️ Cloud-Native & API-First
+### Cloud-Native & API-First
 
 - **Resiliency**: The API client (`client.ts`) implements **automated retries with exponential backoff** for network errors and 5xx responses. This ensures robustness in distributed, cloud environments where transient failures are common.
 - **Strict Typing**: All API interactions benefit from strict TypeScript DTO patterns and Mapper functions (`IncidentMapper.ts`), ensuring a clean contract between frontend and backend.
 
-### 🗣️ Headless Content (Simulation)
+### Headless Content (Simulation)
 
 - **Content as a Service**: The application simulates a Headless CMS integration via `ContentStore` (`contentStore.ts`).
 - **Dynamic Content**: UI strings and labels are fetched dynamically (e.g., via `getContent(...)`) rather than being hardcoded. This paves the way for easy integration with platforms like Contentful or Sanity, and simplifies localization.
 
-## ⚠️ Demo Limitations
+## Demo Limitations
 
 ### Server-Side Pagination
 
