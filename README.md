@@ -1,10 +1,8 @@
 # Incident Triage Console
 
-A modern frontend application for managing and triaging system incidents, built with **Vue 3**, **TypeScript**, and **Vuetify**.
-
 ## MACH Architecture & Design Philosophy
 
-This project is architected to align with **MACH** (Microservices, API-First, Cloud-Native, Headless) principles, demonstrating how a frontend codebase can be structured for enterprise scale.
+This project is made to align with a simulated **MACH** (Microservices, API-First, Cloud-Native, Headless) principles, demonstrating how a frontend codebase can be structured for enterprise scale.
 
 ### Microservices Ready
 
@@ -15,14 +13,13 @@ The frontend treats the backend as a set of distinct, domain-specific services r
 
 ### Cloud-Native & API-First
 
-- **Resiliency**: The API client (`client.ts`) implements **automated retries with exponential backoff** for network errors and 5xx responses. This ensures robustness in distributed, cloud environments where transient failures are common.
+- **Resiliency**: The API client (`client.ts`) implements **automated retries with exponential backoff** for network errors and 5xx responses.
 - **Strict Typing**: All API interactions benefit from strict TypeScript DTO patterns and Mapper functions (`IncidentMapper.ts`), ensuring a clean contract between frontend and backend.
 
 ### Headless Content (Simulation)
 
 - **Content as a Service**: The application simulates a Headless CMS integration via `ContentStore` (`contentStore.ts`).
-- **Dynamic Content**: UI strings and labels are fetched dynamically (e.g., via `getContent(...)`) rather than being hardcoded. This paves the way for easy integration with platforms like Contentful or Sanity, and simplifies localization.
-
+- **Dynamic Content**: UI strings and labels are fetched dynamically (e.g., via `getContent(...)`) rather than being hardcoded.
 ## Demo Limitations
 
 ### Server-Side Pagination
@@ -30,7 +27,7 @@ The frontend treats the backend as a set of distinct, domain-specific services r
 **Note**: This project is a **demo** implementation. As such, it currently **simulates** data fetching but does **not** implement server-side pagination.
 
 - The `fetchAll` method retrieves all mock incidents at once.
-- In a real production environment (`Enterprise Ready`), this would be replaced with a paginated endpoint (e.g., `GET /incidents?page=1&limit=50`) to handle large datasets efficiently.
+- In a real production environment, this would be replaced with a paginated endpoint (e.g., `GET /incidents?page=1&limit=50`) to handle large datasets efficiently.
 
 ## 🛠 Project Setup
 
