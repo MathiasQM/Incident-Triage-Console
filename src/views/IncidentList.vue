@@ -34,7 +34,9 @@ const tableHeaders = [
 ]
 
 onMounted(() => {
-  store.fetchIncidents()
+  if (!store.incidents.length) {
+    store.fetchIncidents()
+  }
   contentStore.fetchContent()
 })
 

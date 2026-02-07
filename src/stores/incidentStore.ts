@@ -39,24 +39,25 @@ export const useIncidentStore = defineStore('incident', () => {
   }
 
   async function updateIncident(id: string, updates: Partial<Incident>) {
-    loading.value = true
+    const index = incidents.value.findIndex((i) => i.id === id)
+    if (index === -1) return
+
+    const previousState = { ...incidents.value[index] } as Incident
+
+    incidents.value[index] = {
+      ...previousState,
+      ...updates,
+      updatedAt: new Date(),
+    }
+
     try {
       const dtoUpdates = mapPartialToIncidentDTO(updates)
       await incidentService.updateIncident(id, dtoUpdates)
-
-      const index = incidents.value.findIndex((i) => i.id === id)
-      if (index !== -1) {
-        incidents.value[index] = {
-          ...incidents.value[index],
-          ...updates,
-          updatedAt: new Date(),
-        } as Incident
-      }
     } catch (err: unknown) {
+      console.error('Optimistic update failed, but persisting local change:', err)
       const message = err instanceof Error ? err.message : 'Unknown error occurred'
       error.value = message
-    } finally {
-      loading.value = false
+      throw err
     }
   }
 

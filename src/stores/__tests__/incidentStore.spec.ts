@@ -105,4 +105,28 @@ describe('Incident Store', () => {
     if (!updated) throw new Error('Updated incident not found')
     expect(updated.updatedAt.getTime()).toBeGreaterThan(targetIncident.updatedAt.getTime())
   })
+
+  it('updates assignee correctly', async () => {
+    const store = useIncidentStore()
+    await store.fetchIncidents()
+
+    const targetIncident = store.incidents.find((i) => i.id === 'INC-1001')
+    if (!targetIncident) throw new Error('INC-1001 not found')
+
+    const updates = {
+      assigneeName: 'Test User',
+      assigneeId: 'test-user-id',
+    }
+
+    vi.spyOn(incidentService, 'updateIncident').mockResolvedValue({
+      ...MOCK_INCIDENTS.find((i) => i.id === 'INC-1001')!,
+      assignee: { id: 'test-user-id', displayName: 'Test User' },
+    })
+
+    await store.updateIncident(targetIncident.id, updates)
+
+    const updated = store.getIncidentById(targetIncident.id)
+    expect(updated?.assigneeName).toBe('Test User')
+    expect(updated?.assigneeId).toBe('test-user-id')
+  })
 })

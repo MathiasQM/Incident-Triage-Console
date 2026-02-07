@@ -37,22 +37,18 @@ const cancel = () => {
   router.back()
 }
 
-const save = async () => {
+const save = () => {
   if (!incident.value) return
 
-  isSaving.value = true
-  try {
-    await store.updateIncident(incidentId, {
+  store
+    .updateIncident(incidentId, {
       status: localStatus.value,
       assigneeName: localAssignee.value,
       assigneeId: localAssignee.value ? `usr-mock-${localAssignee.value}` : null,
     })
-    router.back()
-  } catch (e) {
-    console.error(e)
-  } finally {
-    isSaving.value = false
-  }
+    .catch((e) => console.error('Background save failed', e))
+
+  router.back()
 }
 
 const getSeverityColor = (severity: IncidentSeverity | undefined) => {
